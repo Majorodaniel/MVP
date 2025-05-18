@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Citizen Engagement System - MVP</title>
+<style>
+  /* Reset and base */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #1c1e20, #34413e);
+    margin: 0;
+    padding: 0;
+    color: #222;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+  }
+
+  #app {
+    background: rgb(173, 164, 164);
+    max-width: 950px;
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    padding: 25px 30px 40px;
+  }
+
+  h1 {
+    text-align: center;
+    color: #204d74;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+
+  h2 {
+    color: #326391;
+    margin-top: 1.5em;
+    margin-bottom: 0.7em;
+    font-weight: 600;
+  }
+
+  p.lead {
+    color: #555;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 2em;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #d9f6d0;
+  }
+
+  .tab {
+    padding: 12px 25px;
+    cursor: pointer;
+    font-weight: 600;
+    border-bottom: 3px solid transparent;
+    color: #4169e1;
+    transition: all 0.3s ease;
+  }
+  .tab:hover {
+    background: #eaf4ff;
+  }
+  .tab.active {
+    border-bottom-color: #326391;
+    font-weight: 700;
+    color: #204d74;
+  }
+
+  /* Forms */
+  form {
+    max-width: 600px;
+    margin: 0 auto 40px;
+    padding: 20px 25px;
+    border: 1px solid #c5d9f1;
+    border-radius: 10px;
+    background: #048571;
+  }
+  label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #121213;
+  }
+  input[type="text"],
+  input[type="email"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid #9ec6ef;
+    border-radius: 6px;
+    font-size: 15px;
+    transition: border-color 0.3s ease;
+    font-family: inherit;
+  }
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    border-color: #326391;
+    background: #eaf4ff;
+  }
+  textarea {
+    resize: vertical;
+    min-height: 90px;
+  }
+  button {
+    margin-top: 1.5rem;
+    background: #b96850;
+    border: none;
+    color: white;
+    font-weight: 700;
+    padding: 15px 50px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease;
+  }
+  button:hover {
+    background: #204d74;
+  }
+  .form-footer {
+    text-align: center;
+    color: #204d74;
+    font-weight: 700;
+    margin-top: 15px;
+  }
+  .msg-success {
+    background: #d7f1dc;
+    border: 1.5px solid #4dbb47;
+    margin: 1em auto 1.5em auto;
+    padding: 10px 15px;
+    border-radius: 8px;
+    max-width: 600px;
+    color: #2d5f28;
+    font-weight: 600;
+    text-align: center;
+  }
+  .msg-error {
+    background: #f5d7d7;
+    border: 1.5px solid #c93838;
+    margin: 1em auto 1.5em auto;
+    padding: 10px 15px;
+    border-radius: 8px;
+    max-width: 600px;
+    color: #a02626;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  /* Tickets list */
+  .ticket-list {
+    max-width: 900px;
+    margin: 0 auto 10px;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  .ticket-list th,
+  .ticket-list td {
+    border: 1px solid #cdd9e9;
+    padding: 12px 15px;
+    font-size: 14.5px;
+    text-align: left;
+  }
+
+  .ticket-list th {
+    background: #deeafc;
+    color: #204d74;
+    font-weight: 700;
+  }
+
+  .status-submitted {
+    color: #2f72ce;
+    font-weight: 700;
+  }
+  .status-inprogress {
+    color: #cc9a2f;
+    font-weight: 700;
+  }
+  .status-resolved {
+    color: #2f9e44;
+    font-weight: 700;
+  }
+
+  /* Admin Reply */
+  textarea.reply-text {
+    min-height: 70px;
+    margin-top: 6px;
+  }
+
+  .btn-secondary {
+    background: #999;
+  }
+  .btn-secondary:hover {
+    background: #777;
+  }
+
+  /* Responsive for smaller screens */
+  @media (max-width: 720px) {
+    body {
+      padding: 10px 5px;
+    }
+    #app {
+      padding: 20px 15px 30px;
+    }
+    .ticket-list th,
+    .ticket-list td {
+      font-size: 12.5px;
+      padding: 8px 10px;
+    }
+    form {
+      padding: 12px 15px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div id="app">
+  <h1>Citizen Engagement System</h1>
+  <p class="lead">Submit complaints or feedback about public services and track your tickets.</p>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="citizen-tab" id="tab-citizen">Citizen</div>
+    <div class="tab" data-tab="admin-tab" id="tab-admin">Government Admin</div>
+  </div>
+
+  <section id="citizen-tab" class="tab-content active-tab" aria-label="Citizen interface">
+    <h2>Submit a Complaint or Feedback</h2>
+    <form id="complaint-form" aria-label="Form to submit complaint or feedback">
+      <label for="citizen-name">Enter your first name *</label>
+      <input type="text" id="citizen-name" name="citizen-name" required placeholder="Mbera" aria-required="true" autocomplete="name" />
+      <label for="citizen-name">Enter your second name *</label>
+      <input type="text" id="citizen-name" name="citizen-name" required placeholder="Danny" aria-required="true" autocomplete="name" />
+      <label for="citizen-email">Your Email *</label>
+      <input type="email" id="citizen-email" name="citizen-email" required placeholder="you@example.com" aria-required="true" autocomplete="email" />
+
+      <label for="complaint-category">Category *</label>
+      <select id="complaint-category" name="complaint-category" required aria-required="true">
+        <option value="" disabled selected>Select category</option>
+        <option value="Water Supply">Water Supply</option>
+        <option value="Electricity">Electricity</option>
+        <option value="Road Maintenance">Road Maintenance</option>
+        <option value="Sanitation">Sanitation</option>
+        <option value="Public Safety">Public Safety</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <label for="complaint-description">Complaint / Feedback *</label>
+      <textarea id="complaint-description" name="complaint-description" required placeholder="Explain your issue or feedback here..." aria-required="true" ></textarea>
+
+      <button type="submit">Submit</button>
+    </form>
+
+    <div id="submission-message" role="alert" aria-live="polite"></div>
+
+    <h2>Track Your Tickets</h2>
+    <form id="track-form" aria-label="Form to track tickets">
+      <label for="track-email">Enter your email to view tickets</label>
+      <input type="email" id="track-email" name="track-email" placeholder="you@example.com" autocomplete="email" />
+      <button type="submit">View My Tickets</button>
+    </form>
+
+    <div id="citizen-ticket-list-container"></div>
+  </section>
+
+  <section id="admin-tab" class="tab-content" aria-label="Government Admin interface" hidden>
+    <h2>Admin Dashboard</h2>
+
+    <div style="max-width: 900px; margin-bottom: 15px;">
+      <label for="filter-agency">Filter by Agency:</label>
+      <select id="filter-agency" aria-label="Filter tickets by agency">
+        <option value="All" selected>All Agencies</option>
+      </select>
+
+      <label for="filter-status" style="margin-left: 20px;">Filter by Status:</label>
+      <select id="filter-status" aria-label="Filter tickets by status">
+        <option value="All" selected>All Statuses</option>
+        <option value="Submitted">Submitted</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Resolved">Resolved</option>
+      </select>
+    </div>
+
+    <table class="ticket-list" aria-live="polite" aria-relevant="all" aria-label="List of submitted tickets">
+      <thead>
+        <tr>
+          <th>Ticket ID</th>
+          <th>Citizen</th>
+          <th>Email</th>
+          <th>Category</th>
+          <th>Agency</th>
+          <th>Status</th>
+          <th>Description</th>
+          <th>Response</th>
+          <th>Update Status</th>
+          <th>Send Response</th>
+        </tr>
+      </thead>
+      <tbody id="admin-ticket-body">
+        <!-- Tickets dynamically inserted here -->
+      </tbody>
+    </table>
+
+    <div id="admin-message" role="alert" aria-live="polite" style="margin-top: 10px; max-width: 900px;"></div>
+  </section>
+</div>
+
+<script>
+(() => {
+  // Data & State
+  const TICKET_STORAGE_KEY = 'citizenEngagementTickets';
+
+  // Agencies mapping by category
+  const agencyMap = {
+    "Water Supply": "Water Department",
+    "Electricity": "Electricity Authority",
+    "Road Maintenance": "Public Works",
+    "Sanitation": "Sanitation Department",
+    "Public Safety": "Public Safety Agency",
+    "Other": "General Services"
+  };
+
+  // Get tickets from storage or empty
+  function getTickets() {
+    const stored = localStorage.getItem(TICKET_STORAGE_KEY);
+    try {
+      return stored ? JSON.parse(stored) : [];
+    } catch (e) {
+      console.error('Error parsing tickets from storage', e);
+      return [];
+    }
+  }
+
+  // Save tickets to storage
+  function saveTickets(tickets) {
+    localStorage.setItem(TICKET_STORAGE_KEY, JSON.stringify(tickets));
+  }
+
+  // Generate unique ticket ID
+  function generateTicketId() {
+    // Format: TKT + timestamp + random 4 digit
+    return (
+      "TKT" +
+      Date.now().toString().slice(-6) +
+      Math.floor(1000 + Math.random() * 9000)
+    );
+  }
+
+  // Format date nicely for display
+  function formatDate(timestamp) {
+    const d = new Date(timestamp);
+    return d.toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' });
+  }
+
+  // UI Elements
+  const tabs = document.querySelectorAll('.tab');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  // Tab switching
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const target = tab.dataset.tab;
+
+      tabContents.forEach(tc => {
+        if (tc.id === target) {
+          tc.classList.add('active-tab');
+          tc.hidden = false;
+        } else {
+          tc.classList.remove('active-tab');
+          tc.hidden = true;
+        }
+      });
+    });
+  });
+
+  // Citizen form & track form elements
+  const complaintForm = document.getElementById('complaint-form');
+  const submissionMessage = document.getElementById('submission-message');
+  const trackForm = document.getElementById('track-form');
+  const citizenTicketListContainer = document.getElementById('citizen-ticket-list-container');
+
+  // Admin elements
+  const adminTicketBody = document.getElementById('admin-ticket-body');
+  const adminMessage = document.getElementById('admin-message');
+  const filterAgency = document.getElementById('filter-agency');
+  const filterStatus = document.getElementById('filter-status');
+
+  // Populate agency filter options dynamically
+  function populateAgencyFilter() {
+    const agencies = Object.values(agencyMap).sort();
+    agencies.forEach(agency => {
+      const option = document.createElement('option');
+      option.value = agency;
+      option.textContent = agency;
+      filterAgency.appendChild(option);
+    });
+  }
+
+  populateAgencyFilter();
+
+  // Submit complaint handler
+  complaintForm.addEventListener('submit', e => {
+    e.preventDefault();
+    submissionMessage.textContent = '';
+    submissionMessage.className = '';
+
+    // Validate inputs
+    const name = complaintForm['citizen-name'].value.trim();
+    const email = complaintForm['citizen-email'].value.trim().toLowerCase();
+    const category = complaintForm['complaint-category'].value;
+    const description = complaintForm['complaint-description'].value.trim();
+
+    if (!name || !email || !category || !description) {
+      submissionMessage.textContent = 'Please fill out all required fields.';
+      submissionMessage.className = 'msg-error';
+      return;
+    }
+    if (!validateEmail(email)) {
+      submissionMessage.textContent = 'Please enter a valid email address.';
+      submissionMessage.className = 'msg-error';
+      return;
+    }
+
+    // Create ticket object
+    const ticket = {
+      id: generateTicketId(),
+      citizenName: name,
+      citizenEmail: email,
+      category,
+      agency: agencyMap[category] || 'General Services',
+      description,
+      status: 'Submitted',
+      submittedAt: Date.now(),
+      response: '',
+      responseAt: null
+    };
+
+    // Save to storage
+    const tickets = getTickets();
+    tickets.push(ticket);
+    saveTickets(tickets);
+
+    // Reset form & show message
+    complaintForm.reset();
+    submissionMessage.textContent = `Thank you, your ticket has been submitted successfully! Your ticket ID is ${ticket.id}. Please keep it for your reference.`;
+    submissionMessage.className = 'msg-success';
+
+    // Immediately show in citizen ticket tracking if matching email shown
+    if (trackForm['track-email'].value.trim().toLowerCase() === email) {
+      displayCitizenTickets(email);
+    }
+  });
+
+  // Validate e-mail with simple regex
+  function validateEmail(email) {
+    // Basic RFC2822 regex
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@(([^<>()[\]\\.,;:\s@"]+\.)+[^<>()[\]\\.,;:\s@"]{2,})$/i;
+    return re.test(String(email).toLowerCase());
+  }
+
+  // Track form handler
+  trackForm.addEventListener('submit', e => {
+    e.preventDefault();
+    citizenTicketListContainer.innerHTML = '';
+    const email = trackForm['track-email'].value.trim().toLowerCase();
+    if (!email) {
+      citizenTicketListContainer.innerHTML = '<p>Please enter your email to see your tickets.</p>';
+      return;
+    }
+    if (!validateEmail(email)) {
+      citizenTicketListContainer.innerHTML = '<p style="color:#a02626; font-weight:600;">Please enter a valid email address.</p>';
+      return;
+    }
+    displayCitizenTickets(email);
+  });
+
+  // Display tickets for citizen email
+  function displayCitizenTickets(email) {
+    const tickets = getTickets().filter(t => t.citizenEmail === email);
+    if (tickets.length === 0) {
+      citizenTicketListContainer.innerHTML = '<p>No tickets found for this email.</p>';
+      return;
+    }
+
+    let html = `<table class="ticket-list" aria-label="Your submitted tickets">
+      <thead>
+        <tr>
+          <th>Ticket ID</th>
+          <th>Category</th>
+          <th>Agency</th>
+          <th>Status</th>
+          <th>Description</th>
+          <th>Response</th>
+          <th>Submitted On</th>
+        </tr>
+      </thead>
+      <tbody>`;
+
+    tickets.forEach(ticket => {
+      html += `<tr>
+        <td>${ticket.id}</td>
+        <td>${ticket.category}</td>
+        <td>${ticket.agency}</td>
+        <td class="status-${getStatusClass(ticket.status)}">${ticket.status}</td>
+        <td>${escapeHtml(ticket.description)}</td>
+        <td>${ticket.response ? escapeHtml(ticket.response) : '<em>No response yet</em>'}</td>
+        <td>${formatDate(ticket.submittedAt)}</td>
+      </tr>`;
+    });
+
+    html += '</tbody></table>';
+    citizenTicketListContainer.innerHTML = html;
+  }
+
+  // Helper: get css class suffix from status
+  function getStatusClass(status) {
+    switch (status) {
+      case 'Submitted': return 'submitted';
+      case 'In Progress': return 'inprogress';
+      case 'Resolved': return 'resolved';
+      default: return '';
+    }
+  }
+
+  // Escape HTML to prevent injection
+  function escapeHtml(text) {
+    if (!text) return '';
+    return text
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  // Admin ticket filtering and rendering
+  function renderAdminTickets() {
+    adminMessage.textContent = '';
+    const tickets = getTickets();
+
+    // Apply filters
+    const agencyFilter = filterAgency.value;
+    const statusFilter = filterStatus.value;
+
+    let filtered = tickets;
+    if (agencyFilter !== 'All') {
+      filtered = filtered.filter(t => t.agency === agencyFilter);
+    }
+    if (statusFilter !== 'All') {
+      filtered = filtered.filter(t => t.status === statusFilter);
+    }
+
+    if (filtered.length === 0) {
+      adminTicketBody.innerHTML = `<tr><td colspan="10" style="text-align:center; color:#555;">No tickets matching filters.</td></tr>`;
+      return;
+    }
+
+    const rowsHtml = filtered.map(ticket => {
+      return `<tr>
+        <td>${ticket.id}</td>
+        <td>${escapeHtml(ticket.citizenName)}</td>
+        <td>${escapeHtml(ticket.citizenEmail)}</td>
+        <td>${ticket.category}</td>
+        <td>${ticket.agency}</td>
+        <td class="status-${getStatusClass(ticket.status)}">${ticket.status}</td>
+        <td>${escapeHtml(ticket.description)}</td>
+        <td>
+          <textarea class="reply-text" rows="2" placeholder="Add or edit response here...">${escapeHtml(ticket.response)}</textarea>
+        </td>
+        <td>
+          <select class="status-select">
+            <option value="Submitted" ${ticket.status === 'Submitted' ? 'selected' : ''}>Submitted</option>
+            <option value="In Progress" ${ticket.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+            <option value="Resolved" ${ticket.status === 'Resolved' ? 'selected' : ''}>Resolved</option>
+          </select>
+        </td>
+        <td>
+          <button class="btn-reply" data-ticket-id="${ticket.id}">Save</button>
+        </td>
+      </tr>`;
+    }).join('');
+
+    adminTicketBody.innerHTML = rowsHtml;
+
+    // Attach event listeners to Save buttons
+    const buttons = adminTicketBody.querySelectorAll('.btn-reply');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', adminSaveResponse);
+    });
+  }
+
+  // Admin save response & update status handler
+  function adminSaveResponse(e) {
+    const button = e.target;
+    const tr = button.closest('tr');
+    if (!tr) return;
+
+    const ticketId = button.dataset.ticketId;
+    const responseText = tr.querySelector('textarea.reply-text').value.trim();
+    const newStatus = tr.querySelector('select.status-select').value;
+
+    const tickets = getTickets();
+    const ticketIndex = tickets.findIndex(t => t.id === ticketId);
+    if (ticketIndex === -1) {
+      adminMessage.textContent = 'Error: Ticket not found.';
+      adminMessage.style.color = '#a02626';
+      return;
+    }
+
+    // Update response and status
+    tickets[ticketIndex].response = responseText;
+    if (tickets[ticketIndex].status !== newStatus) {
+      tickets[ticketIndex].status = newStatus;
+      if (newStatus === 'Resolved') {
+        tickets[ticketIndex].responseAt = Date.now();
+      }
+    }
+    saveTickets(tickets);
+
+    adminMessage.textContent = `Ticket ${ticketId} updated successfully.`;
+    adminMessage.style.color = '#2d5f28';
+
+    renderAdminTickets();
+  }
+
+  // Filter change handlers
+  filterAgency.addEventListener('change', renderAdminTickets);
+  filterStatus.addEventListener('change', renderAdminTickets);
+
+  // Initialize admin table on page load
+  renderAdminTickets();
+
+})();
+</script>
+</body>
+</html>
+
