@@ -5,13 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Citizen Engagement System - MVP</title>
 <style>
-  /* Reset and base */
   * {
     box-sizing: border-box;
   }
   body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #1c1e20, #34413e);
+    background: linear-gradient(135deg, #4a90e2, #50e3c2);
     margin: 0;
     padding: 0;
     color: #222;
@@ -23,49 +22,49 @@
   }
 
   #app {
-    background: rgb(173, 164, 164);
-    max-width: 950px;
-    width: 100%;
+    background: rgb(18, 146, 125);
+    max-width: 600px;
+    width: 80%;
     border-radius: 12px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-    padding: 25px 30px 40px;
+    box-shadow: 0 20px 30px rgba(104, 150, 123, 0.15);
+    padding: 10px 30px 40px;
   }
 
   h1 {
     text-align: center;
-    color: #204d74;
-    font-weight: 700;
+    color: #ffff;
+    font-weight: 800;
     margin-bottom: 2px;
   }
 
   h2 {
-    color: #326391;
+    color: #ffff;
     margin-top: 1.5em;
     margin-bottom: 0.7em;
-    font-weight: 600;
+    font-weight: 700;
   }
 
   p.lead {
-    color: #555;
+    color: #ffff;
     text-align: center;
     margin-top: 0;
     margin-bottom: 2em;
   }
 
-  /* Tabs */
+ 
   .tabs {
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
-    border-bottom: 2px solid #d9f6d0;
+    border-bottom: 3px solid #d0e6f6;
   }
 
   .tab {
     padding: 12px 25px;
     cursor: pointer;
-    font-weight: 600;
+    font-weight: 650;
     border-bottom: 3px solid transparent;
-    color: #4169e1;
+    color: #131518;
     transition: all 0.3s ease;
   }
   .tab:hover {
@@ -74,23 +73,24 @@
   .tab.active {
     border-bottom-color: #326391;
     font-weight: 700;
-    color: #204d74;
+    color: #131518;
   }
 
-  /* Forms */
+ 
   form {
     max-width: 600px;
     margin: 0 auto 40px;
     padding: 20px 25px;
     border: 1px solid #c5d9f1;
     border-radius: 10px;
-    background: #048571;
+    background: #f8fbff;
   }
   label {
     display: block;
     margin-bottom: 6px;
     font-weight: 600;
-    color: #121213;
+    color: #204d74;
+    
   }
   input[type="text"],
   input[type="email"],
@@ -98,7 +98,7 @@
   textarea {
     width: 100%;
     padding: 10px 14px;
-    border: 1.5px solid #9ec6ef;
+    border: 2.5px solid #9ec6ef;
     border-radius: 6px;
     font-size: 15px;
     transition: border-color 0.3s ease;
@@ -117,16 +117,17 @@
     min-height: 90px;
   }
   button {
-    margin-top: 1.5rem;
-    background: #b96850;
+    background: #d16d32;
     border: none;
     color: white;
     font-weight: 700;
-    padding: 15px 50px;
+    padding: 12px 25px;
     border-radius: 8px;
     cursor: pointer;
     font-size: 16px;
     transition: background 0.3s ease;
+    margin-top: 10px;
+    width: 100%;
   }
   button:hover {
     background: #204d74;
@@ -241,10 +242,9 @@
   <section id="citizen-tab" class="tab-content active-tab" aria-label="Citizen interface">
     <h2>Submit a Complaint or Feedback</h2>
     <form id="complaint-form" aria-label="Form to submit complaint or feedback">
-      <label for="citizen-name">Enter your first name *</label>
-      <input type="text" id="citizen-name" name="citizen-name" required placeholder="Mbera" aria-required="true" autocomplete="name" />
-      <label for="citizen-name">Enter your second name *</label>
-      <input type="text" id="citizen-name" name="citizen-name" required placeholder="Danny" aria-required="true" autocomplete="name" />
+      <label for="citizen-name">Your Full Name *</label>
+      <input type="text" id="citizen-name" name="citizen-name" required placeholder="John Doe" aria-required="true" autocomplete="name" />
+
       <label for="citizen-email">Your Email *</label>
       <input type="email" id="citizen-email" name="citizen-email" required placeholder="you@example.com" aria-required="true" autocomplete="email" />
 
@@ -650,4 +650,5 @@
 </script>
 </body>
 </html>
+
 
